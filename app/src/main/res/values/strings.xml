@@ -3,4 +3,11 @@
     <string name="password">Password</string>
     <string name="email">E-mail</string>
     <string name="username">Username</string>
+    <string name="_1">1</string>
+    <string name="button">Button</string>
+    <string name="_2">2</string>
+    <string name="i_alredy_have_an_account">I alredy have an account!</string>
+    <string name="register_button">Register</string>
+    <string name="login">Log In</string>
+    <string name="donthaveanaccount">I don\'t have an account yet</string>
 </resources>
