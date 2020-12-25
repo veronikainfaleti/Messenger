@@ -7,6 +7,8 @@ import android.widget.EditText
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,8 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+
+        FirebaseAuth.getInstance()
 
     }
 
