@@ -6,10 +6,11 @@
     <string name="_1">1</string>
     <string name="button">Button</string>
     <string name="_2">2</string>
-    <string name="i_alredy_have_an_account">I alredy have an account!</string>
+    <string name="i_already_have_an_account">I already have an account!</string>
     <string name="register_button">Register</string>
     <string name="login">Log In</string>
     <string name="donthaveanaccount">I don\'t have an account yet</string>
     <string name="register">Sign Up</string>
-    <string name="TagRegister">Register</string>
+    <string name="TagRegister">RegisterActivity</string>
+    <string name="loginTag">LoginActivity</string>
 </resources>
