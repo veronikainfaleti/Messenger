@@ -10,8 +10,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.project.messenger.R
+import com.project.messenger.model.User
 
 class MainActivity : AppCompatActivity() {
     /*lateinit var name: Editable
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 Log.d(getString(R.string.TagRegister), "New user had been registered.")
                 val user = auth.currentUser
+                saveUserToDatabase(name.toString())
                 //updateUI(user)
             } else {
                 Log.w(getString(R.string.TagRegister), "Failed to create a new user.", task.exception)
@@ -83,14 +86,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun updateUI(user: FirebaseUser?) {
-        TODO("Not yet implemented")
-    }
+    private fun saveUserToDatabase(name: String) {
+        val uid = auth.uid ?: return
+        val reference = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
-    public override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
-    }*/
+        val user = User(uid, name)
+        reference.setValue(user).addOnSuccessListener {
+            Log.d(getString(R.string.TagRegister), "New user had been added to the database.")
+        }.addOnFailureListener {
+            Log.w(getString(R.string.TagRegister), "Failed to create a new user.", it)
+        }
+    }
 
 }
