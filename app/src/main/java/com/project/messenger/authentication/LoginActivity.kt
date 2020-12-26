@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
         val register = findViewById<TextView>(R.id.login_to_register)
         register.setOnClickListener {
-            Log.d(getString(R.string.loginTag), "Trying to register")
+            Log.d(getString(R.string.loginTag), "Trying to register a new user...")
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -50,11 +50,11 @@ class LoginActivity : AppCompatActivity() {
         ).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
 
-                Log.d(getString(R.string.loginTag), "Successfully logged in")
+                Log.d(getString(R.string.loginTag), "Successfully logged in.")
                 val user = auth.currentUser
                 //updateUI(user)
             } else {
-                Log.w(getString(R.string.loginTag), "Cannot perform login", task.exception)
+                Log.w(getString(R.string.loginTag), "Cannot perform login.", task.exception)
                 Toast.makeText(
                     this,
                     "Authentication failed.",
