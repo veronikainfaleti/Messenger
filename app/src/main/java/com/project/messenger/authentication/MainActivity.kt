@@ -1,18 +1,17 @@
-package com.project.messenger
+package com.project.messenger.authentication
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.widget.EditText
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.project.messenger.R
 
 class MainActivity : AppCompatActivity() {
     /*lateinit var name: Editable
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 val user = auth.currentUser
                 //updateUI(user)
             } else {
-                Log.w(getString(R.string.TagRegister), "Failed to create a new user", task.exception)
+                Log.w(getString(R.string.TagRegister), "Failed to create a new user.", task.exception)
                 Toast.makeText(
                     this,
                     "Authentication failed.",
