@@ -16,4 +16,5 @@
     <string name="new_message">New Message</string>
     <string name="sign_out">Sign Out</string>
     <string name="user_name_select_user">Username</string>
+    <string name="TagNewMessageActivity">NewMessageActivity</string>
 </resources>
