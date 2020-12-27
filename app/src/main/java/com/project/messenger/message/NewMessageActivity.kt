@@ -1,5 +1,6 @@
 package com.project.messenger.message
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -24,13 +25,13 @@ class NewMessageActivity : AppCompatActivity() {
         supportActionBar?.title = "Select user"
 
         val recyclerView = findViewById<RecyclerView>(R.id.message_view_new_message)
-        
+
         getUsers(recyclerView)
     }
 
     private fun getUsers(view: RecyclerView) {
         val reference = FirebaseDatabase.getInstance().getReference("/users")
-        reference.addListenerForSingleValueEvent(object: ValueEventListener {
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 //TODO("Not yet implemented")
             }
@@ -44,9 +45,18 @@ class NewMessageActivity : AppCompatActivity() {
                     view.adapter = groupAdapter
                     Log.d(getString(R.string.TagNewMessageActivity), it.toString())
 
+                    groupAdapter.setOnItemClickListener { item, view ->
+                        toChat(this@NewMessageActivity, view)
+                    }
                 }
             }
 
         })
+    }
+
+    private fun toChat(activity: NewMessageActivity, view: View) {
+        val intent = Intent(view.context, ChatActivity::class.java)
+        activity.startActivity(intent)
+        finish()
     }
 }

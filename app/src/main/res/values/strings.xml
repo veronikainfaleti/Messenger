@@ -17,4 +17,11 @@
     <string name="sign_out">Sign Out</string>
     <string name="user_name_select_user">Username</string>
     <string name="TagNewMessageActivity">NewMessageActivity</string>
+    <string name="enter_your_message_here">Enter your message here</string>
+    <string name="send">Send</string>
+    <string name="textleft">textleft</string>
+    <string name="textright">textright</string>
+    <string name="testtext">testtext</string>
+    <string name="message_to">testtext</string>
+    <string name="teststring2">teststring2</string>
 </resources>

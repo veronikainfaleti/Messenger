@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="top">100dp</dimen>
+    <dimen name="from_user_message_right">100</dimen>
+    <dimen name="to_value">100</dimen>
 </resources>
