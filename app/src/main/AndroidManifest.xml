@@ -14,17 +14,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Messenger">
-        <activity android:name=".message.LatestMessagesActivity" />
-
-
-        <activity android:name=".authentication.LoginActivity" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+        <activity android:name=".message.NewMessageActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".message.LatestMessagesActivity"/>
         </activity>
-        <activity android:name=".authentication.MainActivity" />
+        <activity android:name=".message.LatestMessagesActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".authentication.LoginActivity" />
+        <activity android:name=".authentication.SignUpActivity" />
     </application>
 
 </manifest>

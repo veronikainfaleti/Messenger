@@ -13,12 +13,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.project.messenger.R
+import com.project.messenger.message.LatestMessagesActivity
 import com.project.messenger.model.User
 
-class MainActivity : AppCompatActivity() {
-    /*lateinit var name: Editable
-    lateinit var email: Editable
-    lateinit var password: Editable*/
+class SignUpActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,12 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun debug() {
-
-    }
-
     private fun registration() {
-        //debug()
 
         val name = findViewById<EditText>(R.id.username_registration).text
         val email = findViewById<EditText>(R.id.email_registration).text
@@ -71,9 +64,8 @@ class MainActivity : AppCompatActivity() {
         ).addOnCompleteListener(this) {task ->
             if (task.isSuccessful) {
                 Log.d(getString(R.string.TagRegister), "New user had been registered.")
-                val user = auth.currentUser
+                //val user = auth.currentUser
                 saveUserToDatabase(name.toString())
-                //updateUI(user)
             } else {
                 Log.w(getString(R.string.TagRegister), "Failed to create a new user.", task.exception)
                 Toast.makeText(
@@ -81,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                     "Authentication failed.",
                     Toast.LENGTH_SHORT
                 ).show()
-                //updateUI(null)
             }
         }
     }
@@ -93,8 +84,18 @@ class MainActivity : AppCompatActivity() {
         val user = User(uid, name)
         reference.setValue(user).addOnSuccessListener {
             Log.d(getString(R.string.TagRegister), "New user had been added to the database.")
+            toLatestMessage(this)
+
         }.addOnFailureListener {
-            Log.w(getString(R.string.TagRegister), "Failed to create a new user.", it)
+            Log.w(getString(R.string.TagRegister), "Failed to create a new user in the database.", it)
+        }
+    }
+
+    companion object {
+        private fun toLatestMessage(activity: SignUpActivity) {
+            val intent = Intent(activity, LatestMessagesActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            activity.startActivity(intent)
         }
     }
 

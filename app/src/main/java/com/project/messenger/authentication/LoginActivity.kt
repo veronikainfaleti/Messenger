@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.project.messenger.R
+import com.project.messenger.message.LatestMessagesActivity
 
 class LoginActivity : AppCompatActivity() {
     /*lateinit var emailLogin: Editable
@@ -32,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
         register.setOnClickListener {
             Log.d(getString(R.string.loginTag), "Trying to register a new user...")
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
     }
@@ -51,8 +52,7 @@ class LoginActivity : AppCompatActivity() {
             if (task.isSuccessful) {
 
                 Log.d(getString(R.string.loginTag), "Successfully logged in.")
-                val user = auth.currentUser
-                //updateUI(user)
+                toLatestMessage(this)
             } else {
                 Log.w(getString(R.string.loginTag), "Cannot perform login.", task.exception)
                 Toast.makeText(
@@ -60,25 +60,18 @@ class LoginActivity : AppCompatActivity() {
                     "Authentication failed.",
                     Toast.LENGTH_SHORT
                 ).show()
-                //updateUI(null)
             }
 
         }
     }
 
-    /*public override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
+    companion object {
+        private fun toLatestMessage(activity: LoginActivity) {
+            val intent = Intent(activity, LatestMessagesActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            activity.startActivity(intent)
+        }
     }
 
-    private fun updateUI(user: FirebaseUser?) {
-        TODO("Not yet implemented")
-    }*/
-
-    /*private fun debug() {
-        Log.d(getString(R.string.loginTag), "E-mail: $emailLogin.")
-        Log.d(getString(R.string.loginTag), "Password: $passwordLogin.")
-    }*/
 
 }
