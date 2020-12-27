@@ -13,4 +13,7 @@
     <string name="register">Sign Up</string>
     <string name="TagRegister">RegisterActivity</string>
     <string name="loginTag">LoginActivity</string>
+    <string name="new_message">New Message</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="user_name_select_user">Username</string>
 </resources>
