@@ -24,4 +24,6 @@
     <string name="testtext">testtext</string>
     <string name="message_to">testtext</string>
     <string name="teststring2">teststring2</string>
+    <string name="chat_activity">ChatActivity</string>
+    <string name="username_chat">username</string>
 </resources>

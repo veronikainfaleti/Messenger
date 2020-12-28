@@ -5,7 +5,7 @@ import com.project.messenger.R
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 
-class UserNewMessage(private val user: User) : Item<GroupieViewHolder>() {
+class UserNewMessage(val user: User) : Item<GroupieViewHolder>() {
 
     override fun getLayout(): Int {
         return R.layout.last_message

@@ -16,6 +16,7 @@ import com.project.messenger.model.User
 import com.project.messenger.model.UserNewMessage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Item
 
 class NewMessageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,20 +34,28 @@ class NewMessageActivity : AppCompatActivity() {
         val reference = FirebaseDatabase.getInstance().getReference("/users")
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                //TODO("Not yet implemented")
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
                 snapshot.children.forEach {
+
+                    //needed to add a no-argument constructor for a deserializer
                     val user = it.getValue(User::class.java) ?: return
+
                     groupAdapter.add(UserNewMessage(user))
                     view.adapter = groupAdapter
+
+                    //some debugging
                     Log.d(getString(R.string.TagNewMessageActivity), it.toString())
 
                     groupAdapter.setOnItemClickListener { item, view ->
-                        toChat(this@NewMessageActivity, view)
+                        toChat(
+                            this@NewMessageActivity,
+                            item,
+                            view
+                        )
                     }
                 }
             }
@@ -54,9 +63,20 @@ class NewMessageActivity : AppCompatActivity() {
         })
     }
 
-    private fun toChat(activity: NewMessageActivity, view: View) {
+    //transition to chat activity
+    private fun toChat(
+        activity: NewMessageActivity,
+        item: Item<GroupieViewHolder>,
+        view: View
+    ) {
+        val itemUser = item as UserNewMessage
         val intent = Intent(view.context, ChatActivity::class.java)
+        intent.putExtra(userKey, itemUser.user) //added parcelable
         activity.startActivity(intent)
         finish()
+    }
+
+    companion object {
+        const val userKey = "User_key"
     }
 }
