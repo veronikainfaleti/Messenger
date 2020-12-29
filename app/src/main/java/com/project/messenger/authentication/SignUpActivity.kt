@@ -64,7 +64,6 @@ class SignUpActivity : AppCompatActivity() {
         ).addOnCompleteListener(this) {task ->
             if (task.isSuccessful) {
                 Log.d(getString(R.string.TagRegister), "New user had been registered.")
-                //val user = auth.currentUser
                 saveUserToDatabase(name.toString())
             } else {
                 Log.w(getString(R.string.TagRegister), "Failed to create a new user.", task.exception)

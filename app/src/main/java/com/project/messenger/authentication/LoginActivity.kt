@@ -15,8 +15,6 @@ import com.project.messenger.R
 import com.project.messenger.message.LatestMessagesActivity
 
 class LoginActivity : AppCompatActivity() {
-    /*lateinit var emailLogin: Editable
-    lateinit var passwordLogin: Editable*/
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +31,22 @@ class LoginActivity : AppCompatActivity() {
         register.setOnClickListener {
             Log.d(getString(R.string.loginTag), "Trying to register a new user...")
 
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
+            toSignUp(this)
         }
     }
 
     private fun login() {
         val emailLogin = findViewById<EditText>(R.id.email_login).text
         val passwordLogin = findViewById<EditText>(R.id.password_login).text
+
+        if (emailLogin.isEmpty() or passwordLogin.isEmpty()) {
+            Toast.makeText(
+                applicationContext,
+                "Fields cannot be empty",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
 
         Log.d(getString(R.string.loginTag), "E-mail: $emailLogin.")
         Log.d(getString(R.string.loginTag), "Password: $passwordLogin.")
@@ -50,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
             passwordLogin.toString()
         ).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-
                 Log.d(getString(R.string.loginTag), "Successfully logged in.")
                 toLatestMessage(this)
             } else {
@@ -69,6 +74,11 @@ class LoginActivity : AppCompatActivity() {
         private fun toLatestMessage(activity: LoginActivity) {
             val intent = Intent(activity, LatestMessagesActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            activity.startActivity(intent)
+        }
+
+        private fun toSignUp(activity: LoginActivity) {
+            val intent = Intent(activity, SignUpActivity::class.java)
             activity.startActivity(intent)
         }
     }

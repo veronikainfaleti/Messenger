@@ -19,6 +19,7 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 
 class NewMessageActivity : AppCompatActivity() {
+    lateinit var groupAdapter: GroupAdapter<GroupieViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
@@ -37,7 +38,7 @@ class NewMessageActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val groupAdapter = GroupAdapter<GroupieViewHolder>()
+                groupAdapter = GroupAdapter()
 
                 snapshot.children.forEach {
 
@@ -77,6 +78,6 @@ class NewMessageActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val userKey = "User_key"
+        const val userKey = "hello_from_the_other_side"
     }
 }

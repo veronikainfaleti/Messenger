@@ -32,6 +32,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         val chatPartner = intent.getParcelableExtra<User>(NewMessageActivity.userKey)
+
         supportActionBar?.title = chatPartner?.username
 
 
@@ -44,7 +45,6 @@ class ChatActivity : AppCompatActivity() {
         getMessages(chatPartner)
 
         val buttonSend = findViewById<Button>(R.id.send_message_chat)
-        val messageTextView = findViewById<TextView>(R.id.message_to_chat_new)
 
         buttonSend.setOnClickListener {
             sendMessage(chatPartner)
@@ -52,11 +52,10 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun getMessages(chatPartner: User?) {
-
-        //val auth = Firebase.auth
         val currentUser = auth.currentUser ?: return
+        chatPartner ?: return
         val reference = FirebaseDatabase.getInstance()
-            .getReference("/all-messages/${currentUser.uid}/${chatPartner!!.uid}")
+            .getReference("/all-messages/${currentUser.uid}/${chatPartner.uid}")
 
         reference.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -104,25 +103,36 @@ class ChatActivity : AppCompatActivity() {
         //get current user
         val currentUser = auth.currentUser ?: return
 
+        if (chatPartner == null) return
+
         //trying to learn how nodes in nosql work
-        val reference = FirebaseDatabase.getInstance()
-            .getReference("/all-messages/${currentUser.uid}/${chatPartner!!.uid}").push()
+        //we are pushing a new message into the new node inside of the /all-messages/../../ node
+        val referenceAllMessages = FirebaseDatabase.getInstance()
+            .getReference("/all-messages/${currentUser.uid}/${chatPartner.uid}").push()
+
+        //we are just changing the current node if it exists
+        //or we create a new node if it is first message in the dialog
+        val referenceLastMessage = FirebaseDatabase.getInstance()
+            .getReference("/last-message/${currentUser.uid}/${chatPartner.uid}")
+
 
         //get message
         val message =
             Message(
-                reference.key!!,
+                referenceAllMessages.key!!,
                 currentUser.uid,
                 chatPartner.uid,
-                messageText.text.toString()
+                messageText.text.toString(),
+                System.currentTimeMillis().toString()
             )
 
         //inject message inside of the current node
-        reference.setValue(message).addOnCompleteListener {
+        referenceAllMessages.setValue(message).addOnCompleteListener {
             if (it.isSuccessful) {
                 Log.d(
                     getString(R.string.chat_activity),
-                    "New message is send successfully. Node: ${reference.key!!}"
+                    "New message is send successfully. Node: ${referenceAllMessages.key!!}\n" +
+                            "message: $message"
                 )
                 messageText.text.clear()
             } else {
@@ -134,21 +144,57 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        //reference for the last message node
+        referenceLastMessage.setValue(message).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d(
+                    getString(R.string.chat_activity),
+                    "Last message is saved successfully. Node: ${referenceLastMessage.key!!}"
+                )
+            } else {
+                Log.w(
+                    getString(R.string.chat_activity),
+                    "Failed to save the last message: $currentUser -> $chatPartner",
+                    it.exception
+                )
+            }
+        }
+
         //if it is a dialog (and not a monologue) perform reverse reference injection
         if (currentUser.uid != chatPartner.uid) {
-            val reverseReference = FirebaseDatabase.getInstance()
+            val reverseReferenceAllMessages = FirebaseDatabase.getInstance()
                 .getReference("/all-messages/${chatPartner.uid}/${currentUser.uid}").push()
 
-            reverseReference.setValue(message).addOnCompleteListener {
+            val reverseReferenceLastMessage = FirebaseDatabase.getInstance()
+                .getReference("/last-message/${chatPartner.uid}/${currentUser.uid}")
+
+            reverseReferenceAllMessages.setValue(message).addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.d(
                         getString(R.string.chat_activity),
-                        "New message is send successfully. Node: ${reverseReference.key!!}"
+                        "New message is send successfully. Node: ${reverseReferenceAllMessages.key!!}"
                     )
                 } else {
                     Log.w(
                         getString(R.string.chat_activity),
                         "Failed to send a message: $chatPartner -> $currentUser",
+                        it.exception
+                    )
+                }
+            }
+
+
+            //reverse reference for the last message node
+            reverseReferenceLastMessage.setValue(message).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d(
+                        getString(R.string.chat_activity),
+                        "Last message is saved successfully. Node: ${reverseReferenceLastMessage.key!!}"
+                    )
+                } else {
+                    Log.w(
+                        getString(R.string.chat_activity),
+                        "Failed to save the last message: $chatPartner -> $currentUser",
                         it.exception
                     )
                 }
